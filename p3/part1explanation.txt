@@ -1,0 +1,23 @@
+Commands to run our part 1 implementation:
+
+cd p3
+make
+chmod +x part1.sh
+./part1.sh
+./cs165-p3 part1 output
+
+Address of printf@plt: Breakpoint 1, 0x08048550 in printf@plt () (value to overwrite function pointer with)
+
+The goal in this part is to exploit a buffer overflow in the stringq_add function to print a user-defined value to the console.
+This was done by overwriting the value of a function pointer (sq->change) to printf, and setting the parameter to the value we wanted to print.
+In order to find the distance between the char* question and the change() function pointer, we did the following:
+    1. Set a breakpoint at stringq_add. This allows us to analyze the "sq" string_q object to find the addresses we need:
+        &sq->answer = 0x804c896
+        &sq->change = 0x804c8b8
+        Difference between the two = 34 memory locations
+    2. Now that we know the offset between the two fields within the struct and the address we want to write, we need to use strcpy to execute this buffer overflow
+    3. We need to copy a string that is 34 bytes long + the address of printf@plt to the answer string.
+    4. We set answer to 0000000000000000000000000000000000\x50\x85\x04\x08.
+Then, we used the change to control the parameters, since function pointers require parameters.
+Since the function is printf, we passed in the string "Hacked!", and the result was printed to the console.
+Of course, the parameter had to be 1 to invoke the change function pointer in the string_question struct.

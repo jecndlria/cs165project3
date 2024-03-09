@@ -16,5 +16,5 @@ In order to find the distance between the char* question and the change() functi
     2. Now that we know the offset between the two fields within the struct and the address we want to write, we need to use strcpy to execute this buffer overflow
     3. We need to copy a string that is 34 bytes long + the address of printf@plt to the answer string.
     4. We set answer to 0000000000000000000000000000000000\x50\x85\x04\x08.
-Then, we used the change to control the parameters, since function pointers require parameters.
+Then, we used the change to control the parameters, since these function pointers require parameters, with this one requiring a string.
 Since the function is printf, we passed in the string "Hacked!", and the result was printed to the console.

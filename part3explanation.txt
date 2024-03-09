@@ -1,0 +1,26 @@
+The type confusion vulnerability can be found in change_question, specifically in this for loop:
+
+  for ( i = 0; answer[i] != '\0'; i++ ) {
+    if (( answer[i] < 48 ) || ( answer[i] > 57 )) {
+      qtype = STRING_QUESTION;
+      break;
+    }
+  }
+
+This for loop classifies the type of question passed in based on the value of the answer passed in.
+The range 48 through 57 defines the ASCII values of the numerical characters.
+Basically, the function says the question is an int type if all the character in the answer parameter are ASCII values representing numerical characters.
+We can take advantage of this type confusion by using a change command for a string question, where the answer we pass in has all numerical character values.
+
+The command add 1 string test 00\x50\x85\x04\x08 does the following:
+    Since a string_question is being read as an int_question, we set the answer to hold the printf@plt pointer.
+    We need to figure out the offset so that the memory location we overwrite to lines up with the type confusion.
+        Offset of answer field in string: 38 (using p /d &((string_q *)0)->answer)
+        Offset of change field in int: 40 (using p /d &((int_q *)0)->change)
+    So add the padding of '00' since they are off by two bytes.
+
+The command change 1 Hacked! 1 does the following:
+    We need to invoke change_question since this will actually read the string question as an int question.
+    This is where the type confusion comes in, since the question gets cast to an int question.
+    The memory location that *change is pointing to is the location we overwrote with the printf@plt pointer value.
+    We can simply pass in "Hacked!" as our answer parameter to print it, much like in part 1.

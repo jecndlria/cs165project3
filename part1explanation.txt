@@ -18,4 +18,3 @@ In order to find the distance between the char* question and the change() functi
     4. We set answer to 0000000000000000000000000000000000\x50\x85\x04\x08.
 Then, we used the change to control the parameters, since function pointers require parameters.
 Since the function is printf, we passed in the string "Hacked!", and the result was printed to the console.
-Of course, the parameter had to be 1 to invoke the change function pointer in the string_question struct.

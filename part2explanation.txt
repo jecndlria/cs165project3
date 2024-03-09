@@ -1,0 +1,9 @@
+The opportunity for a disclosure attack comes from the use of strncpy in intq_add and intq_change.
+If the length passed into strncpy() is == to the destination memory region, then the memory region will be missing a null terminator.
+The lack of a null terminator allows us to overread the buffer; we just need to find how far we need to read to find the answer.
+Our STRING1 value is 24, so we need to ensure that iq->question is filled with a string that is 24 bytes long. 
+This will create a non-null terminated string that we can used to overread.
+Since strncpy just truncates if the src string is greater than the size passed in, we just used the alphabet.
+We used the command add 1 int abcdefghijklmnopqrstuvwxyz 126, where the alphabet string is used to create a non-null terminated string, and 126 is the ASCII value of the '~' character.
+We simply have to attempt to login to leak the value to the terminal, since intq_login uses printf to print the question value. 
+However, since the question value is contiguous to the string in memory, and the string is not null terminated, it will be printed to the console!

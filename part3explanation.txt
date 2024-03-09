@@ -1,3 +1,9 @@
+Commands to run our part 1 implementation:
+
+cd p3
+chmod +x part3.sh
+./part3.sh
+
 The type confusion vulnerability can be found in change_question, specifically in this for loop:
 
   for ( i = 0; answer[i] != '\0'; i++ ) {

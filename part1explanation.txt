@@ -1,10 +1,8 @@
 Commands to run our part 1 implementation:
 
 cd p3
-make
 chmod +x part1.sh
 ./part1.sh
-./cs165-p3 part1 output
 
 Address of printf@plt: Breakpoint 1, 0x08048550 in printf@plt () (value to overwrite function pointer with)
 
